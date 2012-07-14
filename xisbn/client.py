@@ -33,19 +33,19 @@ class xisbnclient(object):
         """
 
         self.method = None
-        self._format = None
+        self.format_ = None
         self.library = None
         self.fl = None
         self.startIndex = None
         self.count = None
         self.ai = None
         self.token = None
-        self._hash = None
+        self.hash_ = None
         self.isbn = None
         self.url = None
 
-    def request(self, isbn, method=None, _format=None, library=None, fl=None,
-                startIndex=None, count=None, ai=None, token=None, _hash=None):
+    def request(self, isbn, method=None, format_=None, library=None, fl=None,
+                startIndex=None, count=None, ai=None, token=None, hash_=None):
 
         """
         Request the webservice
@@ -54,7 +54,7 @@ class xisbnclient(object):
                      a length 10 or 13
         @param method: the method to use. Must be None or a string and match
                        to10|to13|fixChecksum|getMetadata|getEditions
-        @param _format: the _format for the response. Must be None or a string
+        @param format_: the format_ for the response. Must be None or a string
                         and match xml|html|json|python|ruby|php|txt|csv
         @param library: the library to limit the search. Must be None or
                         a string and match ebook|freeebook|bookmooch|paperbackswap|wikipedia|oca|hathi
@@ -66,7 +66,7 @@ class xisbnclient(object):
         @param count: the number of search results. Must be a string or None.
         @param ai: the affiliate id. Must be a string or None.
         @param token: Must be None or a string.
-        @param _hash: Must be None or a string.
+        @param hash_: Must be None or a string.
         """
 
         if isinstance(isbn, str):
@@ -88,14 +88,14 @@ class xisbnclient(object):
         else:
             self.method = False
 
-        if _format is not None:
-            if isinstance(_format, str):
+        if format_ is not None:
+            if isinstance(format_, str):
                 if FORMAT_REGEX_OBJECT.match(_format):
-                    self._format = _format
+                    self.format_ = format_
                 else:
-                    raise ValueError("_format must match xml|html|json|python|ruby|text|csv")
+                    raise ValueError("format_ must match xml|html|json|python|ruby|text|csv")
             else:
-                raise TypeError("_format must be a string or None")
+                raise TypeError("format_ must be a string or None")
         else:
             self._format = False
 
@@ -163,9 +163,9 @@ class xisbnclient(object):
 
         if _hash is not None:
             if isinstance(_hash, str):
-                self._hash = _hash
+                self.hash_ = hash_
             else:
-                raise TypeError("_hash must be a string or None")
+                raise TypeError("hash_ must be a string or None")
         else:
             self._hash = False
 
@@ -178,7 +178,7 @@ class xisbnclient(object):
             variables.append(method_variable)
 
         if self._format is not False:
-            format_variable = "=".join(["format", self._format])
+            format_variable = "=".join(["format", self.format_])
             variables.append(format_variable)
 
         if self.library is not False:
@@ -206,7 +206,7 @@ class xisbnclient(object):
             variables.append(token_variable)
 
         if self._hash is not False:
-            hash_variable = "=".join(["hash", self._hash])
+            hash_variable = "=".join(["hash", self.hash_])
             variables.append(hash_variable)
 
         if len(variables) is not 0:
